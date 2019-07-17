@@ -1,0 +1,79 @@
+image:
+  - Ubuntu
+  - Visual Studio 2017
+
+services:
+  - docker
+
+max_jobs: 2
+
+environment:
+  APPVEYOR_YML_DISABLE_PS_LINUX: true
+
+init:
+  # Windows
+  - cmd: set GENERATOR=Ninja
+  - cmd: set VCVARS=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat
+  - cmd: set PLATFORM=
+  - cmd: set VER_SUFFIX=win64
+  - cmd: set QT_DIR=C:\Qt\5.12\msvc2017_64
+
+  - cmd: call "%QT_DIR%\bin\qtenv2.bat"
+  - cmd: set PATH=C:\msys64\bin;C:\msys64\usr\bin;C:\Qt\Tools\QtCreator\bin;C:\Program Files\CMake\bin;%PATH%
+  - cmd: call "%VCVARS%" %PLATFORM%
+  - cmd: cd /D "%APPVEYOR_BUILD_FOLDER%"
+
+  # Linux
+  - sh: export CC=gcc
+
+install:
+  # Linux
+  - sh: docker build -t rhd2000intf -f contrib/ci/Dockerfile .
+  - sh: if [ "$CC" = "clang" ]; then export CVENDOR="clang" CXX="clang" CC="clang"; fi
+  - sh: if [ "$CC" = "gcc" ]; then export CVENDOR="gcc" CXX="g++" CC="gcc"; fi
+
+  # Windows
+  - cmd: choco upgrade cmake ninja
+  - cmd: cd /D "%APPVEYOR_BUILD_FOLDER%"
+
+before_build:
+  # Windows
+  - cmd: if defined APPVEYOR_REPO_TAG_NAME (for /F %%I in ('git rev-list --count HEAD') do set VERSION=%APPVEYOR_REPO_TAG_NAME%+git%%I) else for /F %%I in ('git rev-list --count HEAD') do set VERSION=git%%I
+  - cmd: set DEPLOY_DIR=RHD2000Interface-%VERSION%
+  - cmd: mkdir build
+  - cmd: cd build
+  - cmd: qmake
+      CONFIG+=release
+      ../source/
+  - cmd: cd ..
+
+build_script:
+  # Linux
+  - sh: docker run --security-opt seccomp:unconfined -t -e COMPILER_VENDOR=$CVENDOR -e CC=$CC -e CXX=$CXX -v `pwd`:/build rhd2000intf
+      ./contrib/ci/cibuild.sh
+
+  # Windows
+  - cmd: cd build
+  - cmd: mingw64-make
+  - cmd: cd ..
+
+after_build:
+  # Windows
+  - cmd: cmake --build build --target install
+  - cmd: cd build
+  - ps: |
+        windeployqt $env:DEPLOY_DIR\bin\rhd2000interface.exe
+
+        cp $env:APPVEYOR_BUILD_FOLDER\LICENSE $env:DEPLOY_DIR\LICENSE.txt
+        cp $env:APPVEYOR_BUILD_FOLDER\README.md $env:DEPLOY_DIR
+        cp $env:APPVEYOR_BUILD_FOLDER\contrib\LICENSES.3rd-party $env:DEPLOY_DIR\LICENSES_3rd-party.txt
+  - cmd: 7z a RHD2000Interface-%VERSION%-%VER_SUFFIX%.zip "%DEPLOY_DIR%"
+  - cmd: cd ..
+
+test: off
+artifacts:
+  - name: Debian Package
+    path: rhd2000interface_*.deb
+
+  - name: Win64 Executable
+    path: build/RHD2000Interface*.zip
