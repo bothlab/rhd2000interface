@@ -14,9 +14,9 @@ $CC --version
 
 # configure PoMiDAQ build with all flags enabled
 mkdir build && cd build
-qmake \
-    CONFIG+=release \
-    ../source/
+cmake -DMAINTAINER=OFF \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    ..
 
 # Build, Test & Install
 make -j4
