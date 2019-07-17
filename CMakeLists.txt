@@ -13,15 +13,18 @@ set(PROJECT_VERSION 1.5.2)
 # Options
 #
 option(MAINTAINER "Enable maintainer mode" OFF)
+option(MORE_WARNINGS "Enable more compiler warnings" ON)
 
 
 #
 # Compiler flags
 #
-add_definitions("-Wall")
+if (MORE_WARNINGS OR MAINTAINER)
+    add_definitions("-Wall")
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_definitions("-Wextra")
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        add_definitions("-Wextra")
+    endif()
 endif()
 if (MAINTAINER)
     if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -32,7 +35,9 @@ endif()
 # Windows compat stuff
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        add_definitions("-Wno-old-style-cast")
+        add_definitions("-Wno-old-style-cast"
+                        "-Wno-c++98-compat"
+        )
     endif()
 endif()
 

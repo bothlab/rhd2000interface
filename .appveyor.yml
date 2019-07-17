@@ -48,6 +48,7 @@ before_build:
       -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
       -DCMAKE_BUILD_TYPE=Release
       -DCMAKE_INSTALL_PREFIX="%DEPLOY_DIR%"
+      -DMORE_WARNINGS=OFF # Clang can't distinguish system from our headers on Windows, so we get flooded with errors
   - cmd: cd ..
 
 build_script:
