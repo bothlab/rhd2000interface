@@ -42,9 +42,12 @@ before_build:
   - cmd: set DEPLOY_DIR=RHD2000Interface-%VERSION%
   - cmd: mkdir build
   - cmd: cd build
-  - cmd: qmake
-      CONFIG+=release
-      ../source/
+  - cmd: cmake -B.
+      -S..
+      -G "%GENERATOR%"
+      -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+      -DCMAKE_BUILD_TYPE=Release
+      -DCMAKE_INSTALL_PREFIX="%DEPLOY_DIR%"
   - cmd: cd ..
 
 build_script:
@@ -53,20 +56,21 @@ build_script:
       ./contrib/ci/cibuild.sh
 
   # Windows
-  - cmd: cd build
-  - cmd: mingw64-make
-  - cmd: cd ..
+  - cmd: cmake --build build
 
 after_build:
   # Windows
   - cmd: cmake --build build --target install
   - cmd: cd build
   - ps: |
-        windeployqt $env:DEPLOY_DIR\bin\rhd2000interface.exe
-
-        cp $env:APPVEYOR_BUILD_FOLDER\LICENSE $env:DEPLOY_DIR\LICENSE.txt
-        cp $env:APPVEYOR_BUILD_FOLDER\README.md $env:DEPLOY_DIR
-        cp $env:APPVEYOR_BUILD_FOLDER\contrib\LICENSES.3rd-party $env:DEPLOY_DIR\LICENSES_3rd-party.txt
+        windeployqt `
+            --no-translations `
+            --no-quick-import `
+            --no-system-d3d-compiler `
+            --no-webkit2 `
+            --no-angle `
+            --no-opengl-sw `
+            $env:DEPLOY_DIR\bin\rhd2000interface.exe
   - cmd: 7z a RHD2000Interface-%VERSION%-%VER_SUFFIX%.zip "%DEPLOY_DIR%"
   - cmd: cd ..
 
