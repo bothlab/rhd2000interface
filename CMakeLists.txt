@@ -1,5 +1,5 @@
 project(RHD2000Interface)
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,10 +23,6 @@ add_definitions("-Wall")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     add_definitions("-Wextra")
 endif()
-if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    add_definitions("-Wno-c++98-compat" "-Wno-c++98-compat-pedantic")
-endif()
-
 if (MAINTAINER)
     if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         add_definitions("-Werror")
@@ -46,8 +42,7 @@ endif()
 #
 include(GNUInstallDirs)
 find_package(Threads)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Multimedia REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Multimedia REQUIRED)
 
 #
 # Config
