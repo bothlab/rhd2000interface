@@ -4,9 +4,9 @@ QT            += widgets multimedia
 
 CONFIG        += static
 
-macx:{
-QMAKE_RPATHDIR += /users/intan/qt/5.7/clang_64/lib
-QMAKE_RPATHDIR += /users/intan/downloads/
+macx: {
+    QMAKE_RPATHDIR += /users/intan/qt/5.7/clang_64/lib
+    QMAKE_RPATHDIR += /users/intan/downloads/
 }
 
 HEADERS       = \
@@ -67,11 +67,15 @@ SOURCES       = main.cpp \
     auxdigoutconfigdialog.cpp \
     cabledelaydialog.cpp \
     helpdialogfastsettle.cpp
-    
+
 RESOURCES     = RHD2000interface.qrc
 
-macx:{
-LIBS += -L$$PWD/../../../Downloads/ -lokFrontPanel
-INCLUDEPATH += $$PWD/../../../Downloads
-DEPENDPATH += $$PWD/../../../Downloads
+macx: {
+    LIBS += -L$$PWD/../../../Downloads/ -lokFrontPanel
+    INCLUDEPATH += $$PWD/../../../Downloads
+    DEPENDPATH += $$PWD/../../../Downloads
+}
+
+linux: {
+    LIBS += -ldl
 }
