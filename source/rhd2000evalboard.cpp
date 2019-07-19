@@ -24,6 +24,8 @@
 #include <vector>
 #include <queue>
 #include <cmath>
+#include <QString>
+#include <QFileInfo>
 
 #include "rhd2000evalboard.h"
 #include "rhd2000datablock.h"
@@ -57,8 +59,16 @@ int Rhd2000EvalBoard::open()
     string serialNumber = "";
     int i, nDevices;
 
+    // find FrontPanel library (on Linux system paths)
+    auto okFrontPanelLibTmp = QStringLiteral("/usr/local/lib/intan/libokFrontPanel.so");
+    if (!QFileInfo(okFrontPanelLibTmp).isFile()) {
+        okFrontPanelLibTmp = QStringLiteral("/usr/lib/intan/libokFrontPanel.so");
+        if (!QFileInfo(okFrontPanelLibTmp).isFile())
+            okFrontPanelLibTmp = QString();
+    }
+
     cout << "---- Intan Technologies ---- Rhythm RHD2000 Controller v1.0 ----" << endl << endl;
-    if (okFrontPanelDLL_LoadLib(NULL) == false) {
+    if (okFrontPanelDLL_LoadLib(okFrontPanelLibTmp.isEmpty()? NULL : qPrintable(okFrontPanelLibTmp)) == false) {
         cerr << "FrontPanel DLL could not be loaded.  " <<
                 "Make sure this DLL is in the application start directory." << endl;
         return -1;
