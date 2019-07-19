@@ -1821,9 +1821,17 @@ void MainWindow::openInterfaceBoard()
         }
     }
 
+    // find FPGA bitfile
+    auto bitfilenameQStr = QStringLiteral("/usr/local/share/intan/rhd2000interface/main.bit");
+    if (!QFileInfo(bitfilenameQStr).isFile()) {
+        bitfilenameQStr = QStringLiteral("/usr/share/intan/rhd2000interface/main.bit");
+        if (!QFileInfo(bitfilenameQStr).isFile())
+            bitfilenameQStr = QString(QCoreApplication::applicationDirPath() + "/main.bit");
+    }
+
     // Load Rhythm FPGA configuration bitfile (provided by Intan Technologies).
-    string bitfilename =
-            QString(QCoreApplication::applicationDirPath() + "/main.bit").toStdString();
+    qDebug() << "Loading FPGA config bitfile from:" << bitfilenameQStr;
+    auto bitfilename = bitfilenameQStr.toStdString();
 
     if (!evalBoard->uploadFpgaBitfile(bitfilename)) {
         QMessageBox::critical(this, tr("FPGA Configuration File Upload Error"),
