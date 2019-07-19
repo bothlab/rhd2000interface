@@ -67,8 +67,17 @@ int Rhd2000EvalBoard::open()
             okFrontPanelLibTmp = QString();
     }
 
+    okFP_dll_pchar okFrontPanelLibPath = NULL;
+    if (!okFrontPanelLibTmp.isEmpty()) {
+#if defined(_WIN32) && defined(_UNICODE)
+        okFrontPanelLibPath = okFrontPanelLibTmp.toStdWString().c_str();
+#else
+        okFrontPanelLibPath = qPrintable(okFrontPanelLibTmp);
+#endif
+    }
+
     cout << "---- Intan Technologies ---- Rhythm RHD2000 Controller v1.0 ----" << endl << endl;
-    if (okFrontPanelDLL_LoadLib(okFrontPanelLibTmp.isEmpty()? NULL : qPrintable(okFrontPanelLibTmp)) == false) {
+    if (okFrontPanelDLL_LoadLib(okFrontPanelLibPath) == false) {
         cerr << "FrontPanel DLL could not be loaded.  " <<
                 "Make sure this DLL is in the application start directory." << endl;
         return -1;
