@@ -1,4 +1,0 @@
-# Allow Compiled Dynamic libraries
-!*.so
-!*.dylib
-!*.dll
