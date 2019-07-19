@@ -1,0 +1,19 @@
+Source: rhd2000interface
+Section: science
+Priority: optional
+Maintainer: Matthias Klumpp <mak@debian.org>
+Build-Depends: debhelper-compat (= 12),
+               cmake,
+               qt5-default,
+               qtmultimedia5-dev
+Standards-Version: 4.3.0
+
+Package: rhd2000interface
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Recommends: intan-okfrontpanel
+Description: Interface for RHD2000 based Intan amplifiers
+ This software is for use with the 256ch RHD2000 USB interface board,
+ part of the RHD2000 evaluation system which allows users to use the
+ Intan Technologies RHD2000 series digital electrophysiology chips.
