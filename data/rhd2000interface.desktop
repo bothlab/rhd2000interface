@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=RHD2000 Interface
+Comment=Intan RHD2000 Evaluation Interface
+Exec=rhd2000interface
+Icon=rhd2000interface
+Terminal=false
+Categories=Science;Biology;Electricity;

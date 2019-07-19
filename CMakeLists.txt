@@ -60,3 +60,4 @@ include_directories(${CMAKE_BINARY_DIR})
 # Subdirectories
 #
 add_subdirectory(source)
+add_subdirectory(data)
