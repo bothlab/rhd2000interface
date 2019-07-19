@@ -13,6 +13,7 @@ RUN eatmydata apt-get install -yq gcc g++ clang
 # install build dependencies
 RUN eatmydata apt-get install -yq --no-install-recommends \
     build-essential \
+    git \
     dpkg-dev \
     devscripts \
     debhelper \
