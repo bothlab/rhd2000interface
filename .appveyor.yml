@@ -77,10 +77,12 @@ after_build:
             $env:DEPLOY_DIR\bin\rhd2000interface.exe
 
         cp ".\intan-okfrontpanel\libraries\Windows 64-bit\okFrontPanel.dll" $env:DEPLOY_DIR\bin\
+        cp $env:APPVEYOR_BUILD_FOLDER\data\main.bit $env:DEPLOY_DIR\bin\
 
         cp $env:APPVEYOR_BUILD_FOLDER\LICENSE.GPLv3 $env:DEPLOY_DIR\LICENSE-GPLv3.txt
         cp $env:APPVEYOR_BUILD_FOLDER\LICENSE.GPLv3 $env:DEPLOY_DIR\LICENSE-LGPLv3.txt
         cp $env:APPVEYOR_BUILD_FOLDER\README.md $env:DEPLOY_DIR
+        cp -r $env:APPVEYOR_BUILD_FOLDER\doc $env:DEPLOY_DIR
   - cmd: 7z a RHD2000Interface-%VERSION%-%VER_SUFFIX%.zip "%DEPLOY_DIR%"
   - cmd: cd ..
 
