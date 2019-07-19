@@ -64,6 +64,8 @@ after_build:
   - cmd: cmake --build build --target install
   - cmd: cd build
   - ps: |
+        git clone https://github.com/bothlab/intan-okfrontpanel.git --depth 1
+
         windeployqt `
             --no-translations `
             --no-quick-import `
@@ -72,6 +74,8 @@ after_build:
             --no-angle `
             --no-opengl-sw `
             $env:DEPLOY_DIR\bin\rhd2000interface.exe
+
+        cp ".\intan-okfrontpanel\libraries\Windows 64-bit\okFrontPanel.dll" $env:DEPLOY_DIR\bin\
   - cmd: 7z a RHD2000Interface-%VERSION%-%VER_SUFFIX%.zip "%DEPLOY_DIR%"
   - cmd: cd ..
 
