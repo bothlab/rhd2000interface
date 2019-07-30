@@ -79,6 +79,8 @@ after_build:
         rm -r $env:DEPLOY_DIR\bin\mediaservice
         rm -r $env:DEPLOY_DIR\bin\playlistformats
 
+        rm -r $env:DEPLOY_DIR\share
+
         cp ".\intan-okfrontpanel\libraries\Windows 64-bit\okFrontPanel.dll" $env:DEPLOY_DIR\bin\
         cp $env:APPVEYOR_BUILD_FOLDER\data\main.bit $env:DEPLOY_DIR\bin\
 
