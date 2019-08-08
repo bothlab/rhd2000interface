@@ -6,13 +6,13 @@ echo "C++ compiler: $CXX"
 set -x
 
 #
-# This script is supposed to run inside the PoMiDAQ Docker container
+# This script is supposed to run inside the RHD2000 Docker container
 # on the CI system.
 #
 
 $CC --version
 
-# configure PoMiDAQ build with all flags enabled
+# configure build with all flags enabled
 mkdir build && cd build
 cmake -DMAINTAINER=OFF \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
