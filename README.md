@@ -14,7 +14,7 @@ so they can be shared between multiple projects that connect to Intan devices wh
 
 ## How to install
 
-On Debian/Ubuntu Linux, just download the ready-made .deb packages from the Github release and install them.
+On Debian/Ubuntu **Linux**, just download the ready-made .deb packages from the Github release and install them.
 You should then be able to launch the RHD2000 Interface from the application menu.
 
 Alternatively, compile from source (works on any Linux distribution as long as the required dependencies
@@ -31,8 +31,8 @@ $ cmake -DCMAKE_BUILDTYPE=RelWithDebInfo ..
 $ make && sudo make install
 ```
 
-On Windows, download and install the USB drivers from the Intan Technologies website before
+On **Windows**, download and install the USB drivers from the Intan Technologies website before
 connecting the RHD2000 USB interface board to a computer. You can then use the prebuilt Windows
-binary from the Github release.
+binary from the [Github release](https://github.com/bothlab/rhd2000interface/releases).
 
 See `doc/README.txt` for more information on this software.
